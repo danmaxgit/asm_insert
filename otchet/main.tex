@@ -1,0 +1,80 @@
+\section{Цель работы}
+Изучение связи ассемблера с языками высокого уровня, получение базовых навыков работы с ассемблерными вставками. Вариант 16.\\
+Вычислить сумму ряда 1 + 2 + 4 + 7 +. . . + n при заданном n.
+\newpage
+\section{Описание алгоритма}
+Данная последовательность называется центральными многоугольными числами, где каждый член последовательности может быть найден по формуле.\\	
+\begin{center}
+$a(n) =  \frac{n*(n+1)}{2} + 1$\\
+\end{center} 
+Соответственно для поиска суммы нужно организовать цикл в котором будет генерироваться $n_\text{ный}$ член прогрессии и добавляться в итоговую сумму.
+Цикл реализван инструкций loop. В качестве счетчика используется регистр cx.
+\newpage
+\section{Исходный код}
+\lstinputlisting[language=c, label=с, caption=Исходный код]{../src/main.c}
+
+\newpage
+\section{Анализ работы}
+\subsection{Версия с процедурой}
+В начале программы по адресу CS:000B задается количество выполнений n. Далее в CS:0013 выполняется переход в тело процедуры CS:002D. На рисунке \ref{proc:2} генерируется $n_\text{ный}$ элемент и возврат к CS:0016. Далее в CS:0021 инструкция LOOP сначала из регистра СХ вычитает единицу и затем его значение сравнивается с нулём. Если регистр не равен нулю, то выполняется переход к указанной метке адресу CS:000F. Иначе переход не выполняется и управление передается команде, которая следует сразу после команды LOOP. В конце сумма сохраняется в перемену по адресу DS:000E.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/begin}
+	\caption{Начало программы с процедурой}
+	\label{proc:1}
+\end{figure}\\
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/call_proc}
+	\caption{Тело процедуры}
+	\label{proc:2}
+\end{figure}\\
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/end_proc}
+	\caption{Конец программы}
+	\label{proc:3}
+\end{figure}\\
+
+\subsection{Результаты выполнения}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/4}
+	\caption{Результат при n = 4}
+	\label{proc:4}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/17}
+	\caption{Результат при n = 17}
+	\label{proc:5}
+\end{figure}
+\newpage
+\subsection{Версия с макросом}
+В начале программы по адресу CS:000B задается количество выполнений n. Далее c CS:0011 по CS:0020 генерируется $n_\text{ный}$ элемент. Далее в CS:0030 инструкция LOOP сначала из регистра СХ вычитает единицу и затем его значение сравнивается с нулём. Если регистр не равен нулю, то выполняется переход к указанной метке адресу CS:000F. Иначе переход не выполняется и управление передается команде, которая следует сразу после команды LOOP. В конце сумма сохраняется в перемену по адресу DS:0010.
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/begin_macro}
+	\caption{Начало программы с процедурой}
+	\label{macro:1}
+\end{figure}\\
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/end_macro}
+	\caption{Конец программы}
+	\label{macro:2}
+\end{figure}\\
+
+\subsection{Результаты выполнения}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/4_macro}
+	\caption{Результат при n = 4}
+	\label{proc:4}
+\end{figure}
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=1\linewidth]{images/15_macro}
+	\caption{Результат при n = 15}
+	\label{proc:5}
+\end{figure}
