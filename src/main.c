@@ -1,36 +1,36 @@
 #include "stdio.h"
+#include "stdint.h"
 
 
-
-int main()
-{
-    unsigned int n=4, sum = 0, index = 0;
-    scanf("%d", &n);
-    // printf("%d\n", n);
-    asm(" \
-    movl %0, %%edx; \
-    movl %1, %%ecx; \
+int main() {
+   uint64_t n = 4, sum = 0, index = 0;
+    scanf("%ld", &n);
+    printf("%ld\n", n);
+    asm ("\
+        movq $0, %3; \
+        movq %1, %%rcx; \
     mainloop: \
-    movl %2, %%eax; \
-    incl %%eax; \
-    mull %2; \
-    movl $2, %%ebx; \
-    divl %%ebx, %%eax; \
-    incl %%eax; \
-    addl %%eax, %%edx; \
-    movl %%eax, %%edx; \
-    movl %2, %%eax;\
-    incl %%eax;\
-    movl %%eax, %2; \
-    loopl mainloop; \
-    movl %%edx, %0;"
+        movq %2, %%rax; \
+        incq %%rax; \
+        mulq %2; \
+        movq $2, %%rbx; \
+        divq %%rbx, %%rax; \
+        incq %%rax; \
+        movq %3, %%rbx; \
+        addq %%rax, %%rbx; \
+        movq %%rbx, %3; \
+        movq %2, %%rax; \
+        incq %%rax; \
+        movq %%rax, %2; \
+    loopq mainloop; \
+        movq %3, %%rax; \
+        movq %%rax, %0;"
     
     : "=r" (sum)
-    : "r" (n), "r" (index)
-    : "eax", "ebx", "edx", "ecx"
+    : "r" (n), "r" (index), "r" (sum)
+    : "rax", "rbx", "rcx", "rdx"
     );
-    //!TODO не сохраняется сумма
-    printf("sum = %d\n", sum);
+    printf("sum = %ld\n", sum);
     return 0;
 }
 
